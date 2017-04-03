@@ -111,10 +111,11 @@ namespace LockScreenNotificationDemo
         public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId)
         {
             if (mediaSessionManager == null)
-            { 
-            
+            {
+                InitializeMediaSession();
             }
 
+            HandleIntent(intent);
             return base.OnStartCommand(intent, flags, startId);
         }
 

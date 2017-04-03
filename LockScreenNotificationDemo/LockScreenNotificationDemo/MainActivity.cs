@@ -1,6 +1,7 @@
 ﻿using Android.App;
 using Android.Widget;
 using Android.OS;
+using Android.Content;
 
 namespace LockScreenNotificationDemo
 {
@@ -21,6 +22,10 @@ namespace LockScreenNotificationDemo
             Button button = FindViewById<Button>(Resource.Id.myButton);
 
             button.Click += delegate { button.Text = $"{count++} clicks!"; };
+
+            var intent = new Intent(ApplicationContext, typeof(MediaPlayerService));
+            intent.SetAction(MediaPlayerService.ActionPlay);
+            StartService(intent);
         }
     }
 }
