@@ -1,0 +1,15 @@
+﻿<Properties StartupConfiguration="{61F6C42B-5916-45B2-93EF-FF7775DFA080}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="LockScreenNotificationDemo/MainActivity.cs">
+    <Files>
+      <File FileName="LockScreenNotificationDemo/Services/MediaPlayerService.cs" Line="105" Column="62" />
+      <File FileName="LockScreenNotificationDemo/MainActivity.cs" Line="10" Column="23" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.LockScreenNotificationDemo PreferredExecutionTarget="Android.Android_Accelerated_x86" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+</Properties>
