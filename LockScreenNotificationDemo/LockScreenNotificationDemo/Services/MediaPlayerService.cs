@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Android.App;
 using Android.Content;
 using Android.Media;
@@ -10,12 +11,12 @@ namespace LockScreenNotificationDemo
     [Service]
     public class MediaPlayerService : Service
     {
-		public const string ActionPlay = "action_play";
-		public const string ActionPause = "action_pause";
-		public const string ActionRewind = "action_rewind";
-		public const string ActionFastForward = "action_fast_forward";
-		public const string ActionNext = "action_next";
-		public const string ActionPrevious = "action_previous";
+        public const string ActionPlay = "action_play";
+        public const string ActionPause = "action_pause";
+        public const string ActionRewind = "action_rewind";
+        public const string ActionFastForward = "action_fast_forward";
+        public const string ActionNext = "action_next";
+        public const string ActionPrevious = "action_previous";
         public const string ActionStop = "action_stop";
 
         private MediaSession mediaSession;
@@ -43,7 +44,7 @@ namespace LockScreenNotificationDemo
 
             var action = intent.Action;
             switch (action)
-            { 
+            {
                 case ActionPlay:
                     mediaController.GetTransportControls().Play();
                     break;
@@ -52,7 +53,7 @@ namespace LockScreenNotificationDemo
                     mediaController.GetTransportControls().Pause();
                     break;
 
-				case ActionRewind:
+                case ActionRewind:
                     mediaController.GetTransportControls().Rewind();
                     break;
 
@@ -103,6 +104,7 @@ namespace LockScreenNotificationDemo
             builder.AddAction(GenerateAction(Android.Resource.Drawable.IcMediaNext, "Next", ActionNext));
 
             style.SetShowActionsInCompactView(0, 1, 2, 3, 4);
+            style.SetMediaSession(mediaSession.SessionToken);
 
             var notificationManager = (NotificationManager)GetSystemService(NotificationService);
             notificationManager.Notify(1, builder.Build());
@@ -119,18 +121,26 @@ namespace LockScreenNotificationDemo
             return base.OnStartCommand(intent, flags, startId);
         }
 
+        private void RetrieveSessions()
+        { 
+            //mediaSessionManager = (MediaSessionManager)ApplicationContext.GetSystemService(MediaSessionService);
+        }
+
         private void InitializeMediaSession()
         {
+            RetrieveSessions();
+
             mediaPlayer = new MediaPlayer();
             mediaSession = new MediaSession(ApplicationContext, "example player session");
             mediaController = new MediaController(ApplicationContext, mediaSession.SessionToken);
 
             var callback = new MediaSessionCallback();
-			mediaSession.SetCallback(callback);
+            mediaSession.SetCallback(callback);
 
             callback.OnPlayChanged += (sender, e) =>
             {
                 BuildNotification(GenerateAction(Android.Resource.Drawable.IcMediaPause, "Pause", ActionPause));
+                mediaPlayer.Start();
             };
 
             callback.OnPauseChanged += (sender, e) =>
@@ -149,8 +159,8 @@ namespace LockScreenNotificationDemo
 
         private class MediaSessionCallback : MediaSession.Callback
         {
-			public event EventHandler OnPlayChanged;
-			public event EventHandler OnPauseChanged;
+            public event EventHandler OnPlayChanged;
+            public event EventHandler OnPauseChanged;
             public event EventHandler OnStopChanged;
 
             public override void OnPlay()
@@ -169,6 +179,13 @@ namespace LockScreenNotificationDemo
             {
                 base.OnStop();
                 OnStopChanged?.Invoke(this, null);
+            }
+        }
+
+        private class ActiveSessionChangedListener : Java.Lang.Object, MediaSessionManager.IOnActiveSessionsChangedListener
+        {
+            public void OnActiveSessionsChanged(IList<MediaController> controllers)
+            {
             }
         }
     }

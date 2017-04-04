@@ -13,6 +13,7 @@
       </intent-filter>
     </activity>
     <service android:name="md5e5236cc997d24d975824e7b93ad5bb3b.MediaPlayerService" />
+    <service android:name="md5e5236cc997d24d975824e7b93ad5bb3b.MediaPlaybackService" />
     <provider android:name="mono.MonoRuntimeProvider" android:exported="false" android:initOrder="2147483647" android:authorities="com.companyname.lockscreennotificationdemo.mono.MonoRuntimeProvider.__mono_init__" />
     <!--suppress ExportedReceiver-->
     <receiver android:name="mono.android.Seppuku">

@@ -1,7 +1,7 @@
 ﻿using Android.App;
-using Android.Widget;
-using Android.OS;
 using Android.Content;
+using Android.OS;
+using Android.Widget;
 
 namespace LockScreenNotificationDemo
 {
@@ -26,6 +26,8 @@ namespace LockScreenNotificationDemo
             var intent = new Intent(ApplicationContext, typeof(MediaPlayerService));
             intent.SetAction(MediaPlayerService.ActionPlay);
             StartService(intent);
+
+            var mediaAudioManager = new MediaAudioManager(ApplicationContext);
         }
     }
 }
