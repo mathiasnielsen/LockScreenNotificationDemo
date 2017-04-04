@@ -5,10 +5,11 @@ using Android.Content;
 using Android.Media;
 using Android.Media.Session;
 using Android.OS;
+using Android.Service.Notification;
 
 namespace LockScreenNotificationDemo
 {
-    [Service]
+	[Service(Enabled = true, Exported = true, Permission = "android.permission.BIND_NOTIFICATION_LISTENER_SERVICE")]
     public class MediaPlayerService : Service
     {
         public const string ActionPlay = "action_play";
@@ -103,7 +104,7 @@ namespace LockScreenNotificationDemo
             builder.AddAction(GenerateAction(Android.Resource.Drawable.IcMediaFf, "Fast forward", ActionFastForward));
             builder.AddAction(GenerateAction(Android.Resource.Drawable.IcMediaNext, "Next", ActionNext));
 
-            style.SetShowActionsInCompactView(0, 1, 2, 3, 4);
+            style.SetShowActionsInCompactView(0, 2, 4);
             style.SetMediaSession(mediaSession.SessionToken);
 
             var notificationManager = (NotificationManager)GetSystemService(NotificationService);
@@ -123,12 +124,16 @@ namespace LockScreenNotificationDemo
 
         private void RetrieveSessions()
         { 
-            //mediaSessionManager = (MediaSessionManager)ApplicationContext.GetSystemService(MediaSessionService);
+            mediaSessionManager = (MediaSessionManager)ApplicationContext.GetSystemService(MediaSessionService);
+
+            var componentName = new ComponentName(this, Java.Lang.Class.FromType(typeof(NotificationListener)));
+			var activeSessions = mediaSessionManager.GetActiveSessions(componentName);
         }
 
         private void InitializeMediaSession()
         {
-            RetrieveSessions();
+            // Does not work. Need a specific permission.
+            ////RetrieveSessions();
 
             mediaPlayer = new MediaPlayer();
             mediaSession = new MediaSession(ApplicationContext, "example player session");
@@ -187,6 +192,14 @@ namespace LockScreenNotificationDemo
             public void OnActiveSessionsChanged(IList<MediaController> controllers)
             {
             }
+        }
+
+        [Service(Enabled = true, Exported = true, Permission = "android.permission.BIND_NOTIFICATION_LISTENER_SERVICE")]
+    	public class NotificationListener : NotificationListenerService
+    	{
+        	public NotificationListener()
+        	{
+        	}
         }
     }
 }
